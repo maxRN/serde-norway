@@ -927,12 +927,8 @@ fn parse_null(scalar: &[u8]) -> Option<()> {
 
 fn parse_bool(scalar: &str) -> Option<bool> {
     match scalar {
-        "y" | "Y" | "yes" | "Yes" | "YES" | "on" | "On" | "ON" | "true" | "True" | "TRUE" => {
-            Some(true)
-        }
-        "n" | "N" | "no" | "No" | "NO" | "off" | "Off" | "OFF" | "false" | "False" | "FALSE" => {
-            Some(false)
-        }
+        "true" | "True" | "TRUE" => Some(true),
+        "false" | "False" | "FALSE" => Some(false),
         _ => None,
     }
 }
@@ -1094,6 +1090,15 @@ pub(crate) fn digits_but_not_number(scalar: &str) -> bool {
     // the YAML 1.2 spec. https://yaml.org/spec/1.2/spec.html#id2761292
     let scalar = scalar.strip_prefix(['-', '+']).unwrap_or(scalar);
     scalar.len() > 1 && scalar.starts_with('0') && scalar[1..].bytes().all(|b| b.is_ascii_digit())
+}
+
+pub(crate) fn is_bool_str(scalar: &str) -> bool {
+    eprintln!("checking if scalar {} needs single quotes", scalar);
+    match scalar {
+        "y" | "Y" | "yes" | "Yes" | "YES" | "on" | "On" | "ON" | "true" | "True" | "TRUE" | "n"
+        | "N" | "no" | "No" | "NO" | "off" | "Off" | "OFF" | "false" | "False" | "FALSE" => true,
+        _ => false,
+    }
 }
 
 pub(crate) fn visit_int<'de, V>(visitor: V, v: &str) -> Result<Result<V::Value>, V>

@@ -1093,7 +1093,6 @@ pub(crate) fn digits_but_not_number(scalar: &str) -> bool {
 }
 
 pub(crate) fn is_bool_str(scalar: &str) -> bool {
-    eprintln!("checking if scalar {} needs single quotes", scalar);
     match scalar {
         "y" | "Y" | "yes" | "Yes" | "YES" | "on" | "On" | "ON" | "true" | "True" | "TRUE" | "n"
         | "N" | "no" | "No" | "NO" | "off" | "Off" | "OFF" | "false" | "False" | "FALSE" => true,
